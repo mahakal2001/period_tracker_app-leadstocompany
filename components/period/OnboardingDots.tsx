@@ -1,0 +1,1 @@
+export default function OnboardingDots({ active }: { active: 1 | 2 | 3 }) { return <div style={{ display: "flex", justifyContent: "center", gap: 10 }}>{[1,2,3].map((item)=><span key={item} style={{ width: item===active ? 28 : 10, height: 10, borderRadius: 999, background: item===active ? "var(--primary)" : "#f6c9dc", transition: "all 160ms ease" }} />)}</div>; }

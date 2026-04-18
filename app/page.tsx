@@ -1,0 +1,5 @@
+import Brand from "@/components/period/Brand";
+import AppShell from "@/components/period/AppShell";
+import StatusBar from "@/components/period/StatusBar";
+import { PrimaryLink } from "@/components/ui/Buttons";
+export default function SplashPage(){return <AppShell><StatusBar /><section style={{ minHeight:"calc(100dvh - 60px)", display:"grid", placeItems:"center" }}><div style={{ width:"100%", textAlign:"center" }}><div style={{ display:"grid", placeItems:"center", marginBottom:26 }}><div className="brand-mark" style={{ width:116, height:116, borderRadius:34, fontSize:52 }}>✦</div></div><div style={{ display:"grid", placeItems:"center" }}><Brand /></div><div style={{ display:"flex", justifyContent:"center", gap:10, marginTop:42 }}><span className="dot" style={{ width:10, height:10, background:"var(--primary)" }}/><span className="dot" style={{ width:10, height:10, background:"#ffbfd9" }}/><span className="dot" style={{ width:10, height:10, background:"#ffe0ec" }}/></div><div style={{ marginTop:48 }}><PrimaryLink href="/onboarding/step-1">Start</PrimaryLink></div></div></section></AppShell>; }

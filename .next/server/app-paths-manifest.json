@@ -1,0 +1,15 @@
+{
+  "/setup/birthday/page": "app/setup/birthday/page.js",
+  "/setup/weight/page": "app/setup/weight/page.js",
+  "/setup/height/page": "app/setup/height/page.js",
+  "/setup/period-length/page": "app/setup/period-length/page.js",
+  "/setup/cycle-length/page": "app/setup/cycle-length/page.js",
+  "/setup/last-period/page": "app/setup/last-period/page.js",
+  "/setup/preparing/page": "app/setup/preparing/page.js",
+  "/home/page": "app/home/page.js",
+  "/tracker/log-count/page": "app/tracker/log-count/page.js",
+  "/add-log/page": "app/add-log/page.js",
+  "/calendar/page": "app/calendar/page.js",
+  "/settings/page": "app/settings/page.js",
+  "/page": "app/page.js"
+}
