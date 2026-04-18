@@ -1,0 +1,1 @@
+export default function StatusBar(){return <div className="status-bar"><span>9:41</span><div className="status-right"><span className="dot"/><span className="dot"/><span className="dot"/><span className="battery"/></div></div>;}

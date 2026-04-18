@@ -1,0 +1,9 @@
+"use client";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import AppShell from "@/components/period/AppShell";
+import StatusBar from "@/components/period/StatusBar";
+import SetupHeader from "@/components/period/SetupHeader";
+import { getProfileDraft, updateProfileDraft } from "@/lib/profile-draft";
+
+export default function SetupWeightPage(){ const router = useRouter(); const [weight,setWeight]=useState("55"); const [unit,setUnit]=useState("kg"); useEffect(()=>{ const draft = getProfileDraft(); if(draft.weight) setWeight(String(draft.weight)); if(draft.weightUnit) setUnit(draft.weightUnit); },[]); return <AppShell><StatusBar /><section className="card stack"><SetupHeader step={3} total={7} backHref="/setup/birthday" title="What’s your weight?" description="Weight details are optional but useful for future wellness tracking and personalized suggestions." /><div className="split-2"><div className="input-wrap"><label className="label">Weight</label><input className="input" type="number" min="1" value={weight} onChange={(e)=>setWeight(e.target.value)} /></div><div className="input-wrap"><label className="label">Unit</label><select className="select" value={unit} onChange={(e)=>setUnit(e.target.value)}><option value="kg">kg</option><option value="lb">lb</option></select></div></div><button className="primary-button" onClick={()=>{ updateProfileDraft({ weight: Number(weight), weightUnit: unit }); router.push('/setup/height'); }} disabled={!weight}>Continue</button></section></AppShell>; }

@@ -1,0 +1,13 @@
+"use client";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Brand from "@/components/period/Brand";
+import AppShell from "@/components/period/AppShell";
+import StatusBar from "@/components/period/StatusBar";
+import { apiRequest } from "@/lib/api";
+import { setAuthSession } from "@/lib/auth-store";
+import { updateProfileDraft } from "@/lib/profile-draft";
+
+type AuthResponse = { accessToken: string; refreshToken: string; tokenType: string };
+
+export default function SignupPage(){ const router = useRouter(); const [fullName,setFullName]=useState(""); const [email,setEmail]=useState(""); const [password,setPassword]=useState(""); const [submitting,setSubmitting]=useState(false); const [error,setError]=useState<string | null>(null); const isValid = fullName.trim().length>1 && email.includes("@") && password.length>=6; const handleSubmit = async (e: React.FormEvent)=>{ e.preventDefault(); if(!isValid) return; try { setSubmitting(true); setError(null); const result = await apiRequest<AuthResponse>('/auth/register', { method: 'POST', body: { fullName, email, password } }); setAuthSession(result.accessToken, result.refreshToken, email); updateProfileDraft({ fullName }); router.push("/setup/name"); } catch (err) { setError(err instanceof Error ? err.message : 'Unable to sign up'); } finally { setSubmitting(false); } }; return <AppShell><StatusBar /><section className="stack"><Brand /><div className="card stack"><div><p className="label">Create account</p><h1 className="page-title" style={{ marginTop:8 }}>Sign up to begin your journey</h1><p className="page-subtitle" style={{ marginTop:12 }}>Set up your account now and we’ll prepare your personalized calendar in the next steps.</p></div>{error ? <div className="metric-box"><p className="page-subtitle" style={{ margin:0 }}>{error}</p></div> : null}<form onSubmit={handleSubmit} className="stack"><div className="input-wrap"><label className="label">Full name</label><input className="input" value={fullName} onChange={(e)=>setFullName(e.target.value)} placeholder="Bhim Charan" /></div><div className="input-wrap"><label className="label">Email address</label><input className="input" type="email" value={email} onChange={(e)=>setEmail(e.target.value)} placeholder="name@example.com" /></div><div className="input-wrap"><label className="label">Password</label><input className="input" type="password" value={password} onChange={(e)=>setPassword(e.target.value)} placeholder="Minimum 6 characters" /></div><button className="primary-button" disabled={!isValid || submitting} style={{ opacity: !isValid || submitting ? .65 : 1 }}>{submitting ? "Creating account..." : "Create account"}</button></form></div></section></AppShell>; }

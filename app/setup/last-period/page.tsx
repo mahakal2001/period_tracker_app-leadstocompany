@@ -1,0 +1,11 @@
+"use client";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import AppShell from "@/components/period/AppShell";
+import StatusBar from "@/components/period/StatusBar";
+import SetupHeader from "@/components/period/SetupHeader";
+import { apiRequest } from "@/lib/api";
+import { getAccessToken } from "@/lib/auth-store";
+import { clearProfileDraft, getProfileDraft, updateProfileDraft } from "@/lib/profile-draft";
+
+export default function SetupLastPeriodPage(){ const router = useRouter(); const [date,setDate]=useState(""); const [submitting,setSubmitting]=useState(false); const [error,setError]=useState<string | null>(null); useEffect(()=>{ const draft = getProfileDraft(); if(draft.lastPeriodStart) setDate(draft.lastPeriodStart); },[]); const submit = async ()=>{ if(!date) return; try { setSubmitting(true); setError(null); updateProfileDraft({ lastPeriodStart: date }); const token = getAccessToken(); const draft = getProfileDraft(); if (!token) throw new Error('Please sign in first'); await apiRequest('/profile', { method: 'PATCH', token, body: { dateOfBirth: draft.dateOfBirth, weight: draft.weight, weightUnit: draft.weightUnit, height: draft.height, heightUnit: draft.heightUnit, averagePeriodDays: draft.averagePeriodDays, averageCycleDays: draft.averageCycleDays, lastPeriodStart: date } }); clearProfileDraft(); router.push('/setup/preparing'); } catch (err) { setError(err instanceof Error ? err.message : 'Unable to save profile'); } finally { setSubmitting(false); } }; return <AppShell><StatusBar /><section className="card stack"><SetupHeader step={7} total={7} backHref="/setup/cycle-length" title="When did your last period start?" description="We’ll use this date to build your first personalized cycle calendar and home dashboard." />{error ? <div className="metric-box"><p className="page-subtitle" style={{ margin:0 }}>{error}</p></div> : null}<div className="input-wrap"><label className="label">Last period start date</label><input className="input" type="date" value={date} onChange={(e)=>setDate(e.target.value)} /></div><button className="primary-button" onClick={submit} disabled={!date || submitting} style={{ opacity: !date || submitting ? .65 : 1 }}>{submitting ? 'Saving profile...' : 'Finish setup'}</button></section></AppShell>; }
